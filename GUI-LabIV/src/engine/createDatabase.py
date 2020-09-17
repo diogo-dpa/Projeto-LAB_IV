@@ -3,7 +3,7 @@
 import os
 import sys
 import numpy as np
-from cv2 import cv2
+import cv2
 
 # caminhoArquivo = sys.argv[1]
 
@@ -27,7 +27,10 @@ def criaPastaComNomes(listaNomes):
 
 # Realiza a captura das faces no vídeo
 def salvaFacesDetectadas(nome):
-    pathFile = r"C:\\Users\\diogo\\AppData\\Local\\Programs\\Python\\Python37\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml"
+    
+    pathFile = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+    
+    # pathFile = r"C:\\Users\\diogo\\AppData\\Local\\Programs\\Python\\Python37\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml"
     face_cascade = cv2.CascadeClassifier(pathFile)
     cap = cv2.VideoCapture(sys.path[0]+ "/" + nome + ".mp4") #inicia captura da câmera
     counterFrames = 0
