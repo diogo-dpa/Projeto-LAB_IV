@@ -1,3 +1,8 @@
 # Dev Dependencies
 node_modules/
 jspm_packages/
+
+*.mp4
+Teste/
+modelo/
+.vscode

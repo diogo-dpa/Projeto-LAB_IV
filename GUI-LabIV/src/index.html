@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>GUI - Lab. IV</title>
     <link rel="stylesheet" href="index.css">
+    <script src="./linkers/createDatabase.js"></script>
+    <script src="./linkers/trainData.js"></script>
+    <script src="./linkers/applyAlgorithm.js"></script>
   </head>
   <body>
     <div class="mainContent">
@@ -11,41 +14,85 @@
       <p>Selecione a pasta de treinamento.</p>
   
       <div class="tab">
-        <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-        <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-        <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+        <button class="tablinks" onclick="openCity(event, 'comofuncionaTab')">Como funciona</button>
+        <button class="tablinks" onclick="openCity(event, 'createDatabaseTab')">Início</button>
+        <button class="tablinks" onclick="openCity(event, 'trainDataTab')">Treinamento</button>
+        <button class="tablinks" onclick="openCity(event, 'applyAlgorithmTab')">Realizar processo</button>
+        <button class="tablinks" onclick="openCity(event, 'Tokyo')">Resultado</button>
       </div>
       
-      <div id="London" class="tabcontent">
+      <div id="comofuncionaTab" class="tabcontent">
+        <h3>Confira os passos abaixo para realizar o procedimento:</h3>
+        <ol>
+          <li>Selecione o vídeo do candidato na aba Início e no botão <span>Criar</span>. Isso criará uma pasta com capturas faciais do candidato. Lembrando que, a pasta terá o mesmo nome do vídeo.</li>
+          <li>Selecione a pasta com as imagens para treinamento do algoritmo. Isso acontece na aba Treinamento.</li>
+          <li>Após alguns segundos, vá na aba Realizar Processo. Nesta parte selecione a pasta criada no passo 1, para que o software aplique o algoritmo treinado e gere os resultados.</li>
+        </ol>
+      </div>
+
+      <div id="createDatabaseTab" class="tabcontent">
+        <h3>Criação de Base de dados</h3>
+        <p>Selecione o diretório onde estão contidos os vídeos para análise.</p>
+        <form>
+          <input type="file" id="myFile" onChange="selectFile(event)" name="filename">
+        </form>
+        <button id="createButton" >Criar</button>
+      </div>
+
+      <div id="trainDataTab" class="tabcontent">
         <h3>Pasta de treinamento</h3>
         <p>Selecione a pasta de treinamento.</p>
         <form >
           <input type="file" webkitdirectory mozdirectory id="myFile" onChange="selectFolder(event)" name="filename">
         </form>
+        <button id="trainButton" >Treinar</button>
       </div>
       
-      <div id="Paris" class="tabcontent">
-        <h3>Paris</h3>
-        <p>Paris is the capital of France.</p> 
+      <div id="applyAlgorithmTab" class="tabcontent">
+        <h3>Realizar o processo</h3>
+        <p>Clique no botão para realizar o processo de reconhecimento étnico, utilizando aprendizado de máquina.</p>
+        <button id="applyButton" >Gerar resultado</button> 
       </div>
       
       <div id="Tokyo" class="tabcontent">
         <h3>Análise</h3>
-        <p>Tokyo is the capital of Japan.</p>
+        <p>Visualize os dados gerados.</p>
       </div>
     </div>
   </body>
+
   <script>
+    // ON CLICK DO CREATEDATABASE
+    document.getElementById('createButton').addEventListener('click', function(){
+      console.log('CLICOU NO CREATE HTML')
+      createDatabase()
+    })
+    // ON CLICK DO TARINDATA
+    document.getElementById('trainButton').addEventListener('click', function(){
+      console.log('CLICOU NO TRAIN HTML')
+      trainData(true)
+    })
+    // ON CLICK DO APPLY
+    document.getElementById('applyButton').addEventListener('click', function(){
+      console.log('CLICOU NO APPLY HTML')
+      trainData(false)
+    })
     
     function selectFolder(e) {
         var theFiles = e.target.files;
         console.log(theFiles);
         let aux = []
-        Array.from(theFiles).map((file) => {
-          aux.push( file.path.split(`${file.name}`)[0])
-        })
-        console.log(aux)
-        console.log(e);
+        console.log(Array.from(theFiles)[0].path)
+        // Array.from(theFiles).map((file) => {
+        //   aux.push( file.path.split(`${file.name}`)[0])
+        // })
+        // console.log(aux);
+    }
+
+    // Captura nome do vídeo selecionado
+    function selectFile(e) {
+        var theFiles = e.target.files[0].name;
+        // console.log(theFiles);
     }
 
     function openCity(evt, cityName) {
@@ -62,4 +109,5 @@
       evt.currentTarget.className += " active";
     }
   </script>
+  
 </html>
