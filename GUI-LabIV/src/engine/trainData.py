@@ -21,20 +21,22 @@ import imageio
 # from keras.models import Sequential
 import sys
 
-print('ENTROU TRAIN DATA ANTES DO PROPS')
-print(sys.argv[1])
-props = sys.argv[1]
-print('ENTROU TRAIN DATA PASSOU DO PROPS')
+# print('ENTROU TRAIN DATA ANTES DO PROPS')
+# print(sys.argv[1])
+# props = sys.argv[1]
+# print(props)
+# print('ENTROU TRAIN DATA PASSOU DO PROPS')
 
-def treinaModelo():
+def treinaModelo(caminhoPastaTreinamento, caminhoPastaSalvaModelo):
 
     # Go to the directory taht has the training database
     # ***** It is needed to write the relative directory to catch teh database *****
-    pathDatabase = r"C:\\Users\\diogo\\OneDrive\\Área de Trabalho\\ENGENHARIA DE SISTEMAS\\10º PERÍODO\\LAB. IV\\UTKFace\\UTKFace"
-    # pathDatabase = r+pastaTreinamento
-
+    # pathDatabase = r"C:\\Users\\diogo\\OneDrive\\Área de Trabalho\\ENGENHARIA DE SISTEMAS\\10º PERÍODO\\LAB. IV\\UTKFace\\UTKFace"
+    pathDatabase = caminhoPastaTreinamento
+    print("AGARROU AQUI")
     os.chdir(pathDatabase)
 
+    print("PASSOU AQUI?")
     # Define dir
     onlyfiles = os.listdir()
 
@@ -143,8 +145,8 @@ def treinaModelo():
     # Print test accuracy 
     print('\n', 'Test accuracy:', score[1])
     
-    model.save("./../../Projeto-LAB_IV/modelo")
-    aplicaModelo()
+    model.save(caminhoPastaSalvaModelo + "modelo")
+    # aplicaModelo()
     # aplicaModelo(model)
 
 
@@ -246,10 +248,12 @@ def aplicaModelo():
 def main():
     
     print('TRAIN DATA NO MAIN')
-    if (props == 'true'):
-        print('TRAIN DATA NO TREINO')
-        # treinaModelo()
-        aplicaModelo()
+    pastaTreinamento = sys.argv[1]
+    pastaSalvaModelo = sys.argv[2]
+    treinaModelo(pastaTreinamento, pastaSalvaModelo)
+    # if (props == 'true'):
+    #     print('TRAIN DATA NO TREINO')
+        # aplicaModelo()
 
 
 if __name__ == "__main__":

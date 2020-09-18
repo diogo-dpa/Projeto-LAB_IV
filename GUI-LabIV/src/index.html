@@ -11,30 +11,27 @@
   <body>
     <div class="mainContent">
       <h1>Bem Vindo!</h1>
-      <p>Selecione a pasta de treinamento.</p>
+      <h3>Confira os passos abaixo para realizar o procedimento:</h3>
+        <ol>
+          <li>Selecione o vídeo do candidato na aba Início e no botão <span>Criar</span>. Isso criará uma pasta com capturas faciais do candidato. Lembrando que, a pasta terá o mesmo nome do vídeo.</li>
+          <li>Selecione a pasta com as imagens para treinamento do algoritmo. Isso acontece na aba Treinamento.</li>
+          <li>Após alguns segundos, vá na aba Realizar Processo. Nesta parte selecione a pasta criada no passo 1, para que o software aplique o algoritmo treinado e gere os resultados.</li>
+        </ol>
   
       <div class="tab">
-        <button class="tablinks" onclick="openCity(event, 'comofuncionaTab')">Como funciona</button>
         <button class="tablinks" onclick="openCity(event, 'createDatabaseTab')">Início</button>
         <button class="tablinks" onclick="openCity(event, 'trainDataTab')">Treinamento</button>
         <button class="tablinks" onclick="openCity(event, 'applyAlgorithmTab')">Realizar processo</button>
         <button class="tablinks" onclick="openCity(event, 'Tokyo')">Resultado</button>
       </div>
       
-      <div id="comofuncionaTab" class="tabcontent">
-        <h3>Confira os passos abaixo para realizar o procedimento:</h3>
-        <ol>
-          <li>Selecione o vídeo do candidato na aba Início e no botão <span>Criar</span>. Isso criará uma pasta com capturas faciais do candidato. Lembrando que, a pasta terá o mesmo nome do vídeo.</li>
-          <li>Selecione a pasta com as imagens para treinamento do algoritmo. Isso acontece na aba Treinamento.</li>
-          <li>Após alguns segundos, vá na aba Realizar Processo. Nesta parte selecione a pasta criada no passo 1, para que o software aplique o algoritmo treinado e gere os resultados.</li>
-        </ol>
-      </div>
 
       <div id="createDatabaseTab" class="tabcontent">
         <h3>Criação de Base de dados</h3>
         <p>Selecione o diretório onde estão contidos os vídeos para análise.</p>
         <form>
-          <input type="file" id="myFile" onChange="selectFile(event)" name="filename">
+          <input type="file" id="chooseFileToCreate" name="chooseFileToCreate">
+          <!-- <input type="file" id="myFile" onChange="selectFile(event)" name="filename"> -->
         </form>
         <button id="createButton" >Criar</button>
       </div>
@@ -43,7 +40,10 @@
         <h3>Pasta de treinamento</h3>
         <p>Selecione a pasta de treinamento.</p>
         <form >
-          <input type="file" webkitdirectory mozdirectory id="myFile" onChange="selectFolder(event)" name="filename">
+          <label>Escolha a pasta para salvar o modelo que será treinado.</label>
+          <input type="file" webkitdirectory mozdirectory id="chooseFolderToSaveModelTrained">
+          <label>Escolha a pasta que contém os dados de Treinamento.</label>
+          <input type="file" webkitdirectory mozdirectory id="chooseFolderToTrain">
         </form>
         <button id="trainButton" >Treinar</button>
       </div>
@@ -51,6 +51,12 @@
       <div id="applyAlgorithmTab" class="tabcontent">
         <h3>Realizar o processo</h3>
         <p>Clique no botão para realizar o processo de reconhecimento étnico, utilizando aprendizado de máquina.</p>
+        <form >
+          <label>Escolha a pasta que você salvou o modelo treinado.</label>
+          <input type="file" webkitdirectory mozdirectory id="chooseFolderFromModelTrained">
+          <label>Escolha a pasta contendo a Database incial, para aplicar o modelo treinado.</label>
+          <input type="file" webkitdirectory mozdirectory id="chooseFolderToApplyModel">
+        </form>
         <button id="applyButton" >Gerar resultado</button> 
       </div>
       
@@ -62,38 +68,100 @@
   </body>
 
   <script>
+
+    // ON CHANGE DO CREATEDATABASE - SELECIONANDO ARQUIVO
+    document.getElementById('chooseFileToCreate').addEventListener('change', function(e){
+      console.log('ARMAZENOU NO CREATE DATABASE - FOLDER ')
+      const [arquivoSelecionado, pastaSelecionada] = selectFile(e)
+
+      console.log(`${pastaSelecionada}`)
+      console.log(`${arquivoSelecionado}`)
+      // return pastaSelecionada;
+      localStorage.setItem('caminhoCreateDatabase', JSON.stringify(pastaSelecionada))
+      localStorage.setItem('arquivoCreateDatabase', JSON.stringify(arquivoSelecionado))
+    })
+    
     // ON CLICK DO CREATEDATABASE
     document.getElementById('createButton').addEventListener('click', function(){
       console.log('CLICOU NO CREATE HTML')
-      createDatabase()
+      const resultadoPasta = localStorage.getItem('caminhoCreateDatabase')
+      const resultadoArquivo = localStorage.getItem('arquivoCreateDatabase')
+      // console.log(JSON.parse(resultado));
+      // console.log(JSON.parse(resultado));
+      createDatabase(JSON.parse(resultadoPasta), JSON.parse(resultadoArquivo))
+    })
+    
+    
+
+    // ON CHANGE DO TRAINDATA - SELECIONANDO PASTA
+    document.getElementById('chooseFolderToTrain').addEventListener('change', function(e){
+      console.log('ARMAZENOU NO TRAIN DATA - FOLDER ')
+      const pastaSelecionada = selectFolder(e)
+
+      console.log(`${pastaSelecionada}`)
+      // return pastaSelecionada;
+      localStorage.setItem('caminhoPastaTreinamento', JSON.stringify(pastaSelecionada))
+    })
+    document.getElementById('chooseFolderToSaveModelTrained').addEventListener('change', function(e){
+      console.log('SELECIONA PASTA PARA SALVAR O MODELO - FOLDER ')
+      const pastaSelecionada = selectFolder(e)
+
+      console.log(`${pastaSelecionada}`)
+      // return pastaSelecionada;
+      localStorage.setItem('caminhoPastaSalvaModeloTreinado', JSON.stringify(pastaSelecionada))
     })
     // ON CLICK DO TARINDATA
     document.getElementById('trainButton').addEventListener('click', function(){
       console.log('CLICOU NO TRAIN HTML')
-      trainData(true)
+      const resultadoPasta = localStorage.getItem('caminhoPastaTreinamento')
+      const caminhoPastaSalvaModeloTreinado = localStorage.getItem('caminhoPastaSalvaModeloTreinado')
+      trainData(JSON.parse(resultadoPasta), JSON.parse(caminhoPastaSalvaModeloTreinado))
     })
+
+
+
+    // ON CHANGE DO CREATEDATABASE - SELECIONANDO ARQUIVO
+    document.getElementById('chooseFolderFromModelTrained').addEventListener('change', function(e){
+      console.log('ARMAZENOU NO APPLY - FOLDER ')
+      const pastaSelecionada = selectFolder(e)
+
+      console.log(`${pastaSelecionada}`)
+      localStorage.setItem('caminhoModeloTreinado', JSON.stringify(pastaSelecionada))
+    })
+    document.getElementById('chooseFolderToApplyModel').addEventListener('change', function(e){
+      console.log('ARMAZENOU NO APPLY - FOLDER ')
+      const pastaSelecionada = selectFolder(e)
+
+      console.log(`${pastaSelecionada}`)
+      localStorage.setItem('caminhoPastaParaAplicar', JSON.stringify(pastaSelecionada))
+    })
+
     // ON CLICK DO APPLY
     document.getElementById('applyButton').addEventListener('click', function(){
       console.log('CLICOU NO APPLY HTML')
-      trainData(false)
+      const caminhoModeloTreinado = localStorage.getItem('caminhoModeloTreinado')
+      const caminhoPastaParaAplicar = localStorage.getItem('caminhoPastaParaAplicar')
+      applyAlgorithm(JSON.parse(caminhoModeloTreinado),JSON.parse(caminhoPastaParaAplicar))
     })
+
     
-    function selectFolder(e) {
-        var theFiles = e.target.files;
-        console.log(theFiles);
-        let aux = []
-        console.log(Array.from(theFiles)[0].path)
-        // Array.from(theFiles).map((file) => {
-        //   aux.push( file.path.split(`${file.name}`)[0])
-        // })
-        // console.log(aux);
+    function selectFile(e) {
+        // var theFiles = e.target.files;
+        var theFolder = e.target.files;
+        const pathCatched = theFolder[0].path.split(`${theFolder[0].name}`)[0] 
+        const nameCatched = theFolder[0].name 
+        // console.log(theFolder[0].path.split(`${theFolder[0].name}`)[1]);
+        return [nameCatched, pathCatched ];
     }
 
-    // Captura nome do vídeo selecionado
-    function selectFile(e) {
-        var theFiles = e.target.files[0].name;
-        // console.log(theFiles);
+    function selectFolder(e) {
+        var theFolder = e.target.files;
+        console.log(theFolder[0])
+        const pathCatched = theFolder[0].path.split(`${theFolder[0].name}`)[0] 
+        console.log(pathCatched)
+        return pathCatched;
     }
+
 
     function openCity(evt, cityName) {
       var i, tabcontent, tablinks;

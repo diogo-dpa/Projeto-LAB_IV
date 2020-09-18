@@ -1,19 +1,21 @@
 
-function applyAlgorithm(){
+function applyAlgorithm(caminhoModeloTreinado, caminhoPastaParaAplicar){
     const { PythonShell } = require('python-shell');
 
     const path = require('path');
     console.log('ENTROU APPLY JS')
     // var elementoHTML = document.getElementById("elemento").value;
 
-    const opcoes = {
+    const config = {
         script: path.join(__dirname, '/engine/applyAlgorithm.py'),
-        // args: [elementoHTML]
+        options: {
+            args: [caminhoModeloTreinado, caminhoPastaParaAplicar]
+        }
     }
 
-    const variavel = new PythonShell(opcoes.script);
+    const variavel = new PythonShell(config.script, config.options);
 
     variavel.on('message', function(message){
-        swal(message);
+        console.log(message);
     })
 }

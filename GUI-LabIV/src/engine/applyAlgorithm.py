@@ -6,18 +6,23 @@ import seaborn as sns
 import os
 import imageio
 import sys
+import keras
 
-argumentos = sys.argv[1]
+caminhoModeloTreinado = sys.argv[1]
+caminhoPastaParaAplicar = sys.argv[2]
 
-model = argumentos
+# model = argumentos
 
 # Use the folder created by createDatbase algorithm
 # testing my own data
-folderName = "Teste"
+# folderName = "Teste"
+
+model = keras.models.load_model(caminhoModeloTreinado)
 
 print('ENTROU APPLY JS')
 
-pathFolder = r'C:\\Users\\diogo\\OneDrive\\Área de Trabalho\\ENGENHARIA DE SISTEMAS\\10º PERÍODO\\LAB. IV\\Projeto-LABIV' + folderName
+# pathFolder = r'C:\\Users\\diogo\\OneDrive\\Área de Trabalho\\ENGENHARIA DE SISTEMAS\\10º PERÍODO\\LAB. IV\\Projeto-LABIV' + folderName
+pathFolder = caminhoPastaParaAplicar
 os.chdir(pathFolder) # changing directory
 onlyimage = os.listdir()
 
@@ -41,7 +46,6 @@ myDATA = np.squeeze(myDATA)
 
 # Normalize data
 myDATA = myDATA/255.0
-
 
 # Predicting my data
 myFace_predict = model.predict(myDATA)

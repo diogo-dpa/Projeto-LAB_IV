@@ -1,5 +1,5 @@
 
-function trainData(treinamento){
+function trainData(treinamento, caminhoPastaSalvaModelo){
     const { PythonShell } = require('python-shell');
 
     const path = require('path');
@@ -8,14 +8,14 @@ function trainData(treinamento){
     console.log(treinamento)
     // var elementoHTML = document.getElementById("elemento").value;
 
-    const optionsUpper = {
+    const config = {
         script: path.join(__dirname, '/engine/trainData.py'),
         options: {
-            args: [treinamento]
+            args: [treinamento, caminhoPastaSalvaModelo]
         }
     }
 
-    const variavel = new PythonShell(optionsUpper.script, optionsUpper.options);
+    const variavel = new PythonShell(config.script, config.options);
 
     // treinamento? variavel = new PythonShell(opcoes.script):
     //     variavel = new PythonShell(opcoes.script);
