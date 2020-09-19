@@ -11,8 +11,6 @@ import keras
 caminhoModeloTreinado = sys.argv[1]
 caminhoPastaParaAplicar = sys.argv[2]
 
-# model = argumentos
-
 # Use the folder created by createDatbase algorithm
 # testing my own data
 # folderName = "Teste"
@@ -30,7 +28,7 @@ size_image = 32
 
 # Define labels
 labels =["Branco",  # index 0
-        "Preto",      # index 1
+        "Negro",      # index 1
         "Ásiatico",  # index 2
         "Pardo"      # index 3
         ]
@@ -74,7 +72,7 @@ print('Soma = {}'.format(sum(dados['Percentual']) ))
 myLabel = 0 # Branco
 
 # Plot a random sample of 30 test images, their predicted labels and ground truth
-figure = plt.figure(figsize=(20, 8))
+figure = plt.figure(figsize=(12, 7))
 plt.tight_layout()
 
 random_number = np.random.choice(myDATA.shape[0], size=15, replace=False)

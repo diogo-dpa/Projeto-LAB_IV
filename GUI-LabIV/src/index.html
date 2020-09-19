@@ -30,34 +30,50 @@
         <h3>Criação de Base de dados</h3>
         <p>Selecione o diretório onde estão contidos os vídeos para análise.</p>
         <form>
-          <input type="file" id="chooseFileToCreate" name="chooseFileToCreate">
-          <!-- <input type="file" id="myFile" onChange="selectFile(event)" name="filename"> -->
+          <div class="firstPart">
+            <label>Selecione o <span>vídeo</span> que será analisado.</p>
+            <input type="file" id="chooseFileToCreate" name="chooseFileToCreate">
+          </div>
         </form>
-        <button id="createButton" >Criar</button>
+        <div class="divButton">
+          <button id="createButton">Criar pasta</button>
+        </div>
       </div>
 
       <div id="trainDataTab" class="tabcontent">
-        <h3>Pasta de treinamento</h3>
-        <p>Selecione a pasta de treinamento.</p>
+        <h3>Treinamento do algoritmo</h3>
+        <p>Nesta parte, implementaremos o treinamento do modelo.</p>
         <form >
-          <label>Escolha a pasta para salvar o modelo que será treinado.</label>
-          <input type="file" webkitdirectory mozdirectory id="chooseFolderToSaveModelTrained">
-          <label>Escolha a pasta que contém os dados de Treinamento.</label>
-          <input type="file" webkitdirectory mozdirectory id="chooseFolderToTrain">
+          <div class="firstPart">
+            <label>Escolha a <span>pasta</span> para salvar o modelo que será treinado.</label>
+            <input type="file" webkitdirectory mozdirectory id="chooseFolderToSaveModelTrained">
+          </div>
+          <div class="secondPart">
+            <label>Escolha a <span>pasta</span> que contém os dados de Treinamento.</label>
+            <input type="file" webkitdirectory mozdirectory id="chooseFolderToTrain">
+          </div>
         </form>
-        <button id="trainButton" >Treinar</button>
+        <div class="divButton">
+          <button id="trainButton" >Treinar modelo</button>
+        </div>
       </div>
       
       <div id="applyAlgorithmTab" class="tabcontent">
-        <h3>Realizar o processo</h3>
-        <p>Clique no botão para realizar o processo de reconhecimento étnico, utilizando aprendizado de máquina.</p>
+        <h3>Execução do modelo treinado</h3>
+        <p>Por último, aplicaremos o modelo treinado na pasta com as fotos faciais do candidato, geradas em Início</p>
         <form >
-          <label>Escolha a pasta que você salvou o modelo treinado.</label>
-          <input type="file" webkitdirectory mozdirectory id="chooseFolderFromModelTrained">
-          <label>Escolha a pasta contendo a Database incial, para aplicar o modelo treinado.</label>
-          <input type="file" webkitdirectory mozdirectory id="chooseFolderToApplyModel">
+          <div class="firstPart">
+            <label>Escolha a <span>pasta</span> que você salvou o modelo treinado.</label>
+            <input type="file" webkitdirectory mozdirectory id="chooseFolderFromModelTrained">
+          </div>
+          <div class="secondPart">
+            <label>Escolha a <span>pasta</span> contendo a Database inicial, para aplicar o modelo treinado.</label>
+            <input type="file" webkitdirectory mozdirectory id="chooseFolderToApplyModel">
+          </div>
         </form>
-        <button id="applyButton" >Gerar resultado</button> 
+        <div class="divButton">
+          <button id="applyButton">Aplicar modelo na pasta</button> 
+        </div>
       </div>
       
       <div id="Tokyo" class="tabcontent">
@@ -76,7 +92,6 @@
 
       console.log(`${pastaSelecionada}`)
       console.log(`${arquivoSelecionado}`)
-      // return pastaSelecionada;
       localStorage.setItem('caminhoCreateDatabase', JSON.stringify(pastaSelecionada))
       localStorage.setItem('arquivoCreateDatabase', JSON.stringify(arquivoSelecionado))
     })
@@ -86,8 +101,6 @@
       console.log('CLICOU NO CREATE HTML')
       const resultadoPasta = localStorage.getItem('caminhoCreateDatabase')
       const resultadoArquivo = localStorage.getItem('arquivoCreateDatabase')
-      // console.log(JSON.parse(resultado));
-      // console.log(JSON.parse(resultado));
       createDatabase(JSON.parse(resultadoPasta), JSON.parse(resultadoArquivo))
     })
     
@@ -99,7 +112,6 @@
       const pastaSelecionada = selectFolder(e)
 
       console.log(`${pastaSelecionada}`)
-      // return pastaSelecionada;
       localStorage.setItem('caminhoPastaTreinamento', JSON.stringify(pastaSelecionada))
     })
     document.getElementById('chooseFolderToSaveModelTrained').addEventListener('change', function(e){
@@ -107,7 +119,6 @@
       const pastaSelecionada = selectFolder(e)
 
       console.log(`${pastaSelecionada}`)
-      // return pastaSelecionada;
       localStorage.setItem('caminhoPastaSalvaModeloTreinado', JSON.stringify(pastaSelecionada))
     })
     // ON CLICK DO TARINDATA
@@ -146,11 +157,9 @@
 
     
     function selectFile(e) {
-        // var theFiles = e.target.files;
         var theFolder = e.target.files;
         const pathCatched = theFolder[0].path.split(`${theFolder[0].name}`)[0] 
         const nameCatched = theFolder[0].name 
-        // console.log(theFolder[0].path.split(`${theFolder[0].name}`)[1]);
         return [nameCatched, pathCatched ];
     }
 

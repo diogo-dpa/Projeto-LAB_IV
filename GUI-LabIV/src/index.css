@@ -5,6 +5,7 @@ body {
   margin: 0;
   width: 100%;
   height: 100%;
+  background-color: #EAEAEA;
   /* padding: 2rem; */
 }
 
@@ -53,6 +54,7 @@ body {
   box-sizing: border-box;
   transition: 0.3s;
   font-size: 17px;
+  font-weight: 700;
 }
 
 /* Change background color of buttons on hover */
@@ -77,4 +79,58 @@ body {
   border: 1px solid #ccc;
   border-top: none;
 
+}
+
+.tabcontent h3, .tabcontent p{
+  text-align: center;
+}
+
+.tabcontent .divButton{
+  display: flex;
+  justify-content: center;
+
+}
+
+.tabcontent .divButton button{
+  min-width: 120px;
+  background-color: rgb(110, 202, 110);
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 17px;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.tabcontent .divButton button:hover{
+  opacity: 0.8;
+  transition: opacity 0.5s;
+}
+
+
+.tabcontent form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-evenly;
+
+  margin-bottom: 25px;
+}
+
+.tabcontent form .firstPart, .tabcontent form .secondPart{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 25px;
+}
+
+.tabcontent form div + div{
+  margin-top: 20px;
+}
+
+.tabcontent .firstPart label span, .tabcontent .secondPart label span{
+  font-weight: 700;
 }
