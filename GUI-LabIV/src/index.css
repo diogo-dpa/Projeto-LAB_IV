@@ -78,7 +78,6 @@ body {
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
-
 }
 
 .tabcontent h3, .tabcontent p{
@@ -88,7 +87,6 @@ body {
 .tabcontent .divButton{
   display: flex;
   justify-content: center;
-
 }
 
 .tabcontent .divButton button{
@@ -109,7 +107,6 @@ body {
   transition: opacity 0.5s;
 }
 
-
 .tabcontent form{
   width: 100%;
   display: flex;
@@ -127,10 +124,61 @@ body {
   padding: 0 25px;
 }
 
+.tabcontent form .secondPart .radioOption{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  margin-top: 10px;
+}
+
+.radioOption input{
+  margin: 0 10px 0 0;
+}
+
 .tabcontent form div + div{
   margin-top: 20px;
 }
 
 .tabcontent .firstPart label span, .tabcontent .secondPart label span{
   font-weight: 700;
+}
+
+/* Loading */
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid rgb(110, 202, 110); /* Blue */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+.tabcontent .divLoader{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.resultPart{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.resultPart + .resultPart{
+  margin-top: 20px;
+}
+
+.tabcontent img{
+  width: 850px;
+  height: 520px;
+
+  align-self: center;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

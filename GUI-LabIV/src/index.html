@@ -26,15 +26,48 @@
       </div>
       
 
-      <div id="createDatabaseTab" class="tabcontent">
+      <div id="createDatabaseTab" class="tabcontent" id="tabcontent">
         <h3>Criação de Base de dados</h3>
         <p>Selecione o diretório onde estão contidos os vídeos para análise.</p>
         <form>
           <div class="firstPart">
-            <label>Selecione o <span>vídeo</span> que será analisado.</p>
+            <label>Selecione o <span>vídeo</span> que será analisado (formato <span>.mp4</span>).</label>
             <input type="file" id="chooseFileToCreate" name="chooseFileToCreate">
           </div>
+
+          <div class="secondPart">
+            <label>Selecione a <span>etnia</span> declarada pelo candidato.</label>
+
+            <div class="radioOption">
+              <input type="radio" id="branco" name="etnia" value="Branco" onclick="salvaEtnia(this.value)">
+              <label for="branco">Branco</label><br>
+            </div>
+
+            <div class="radioOption">
+              <input type="radio" id="pardo" name="etnia" value="Pardo" onclick="salvaEtnia(this.value)">
+              <label for="pardo">Pardo</label><br>
+            </div>
+
+            <div class="radioOption">
+              <input type="radio" id="negro" name="etnia" value="Negro" onclick="salvaEtnia(this.value)">
+              <label for="negro">Negro</label><br>
+            </div>
+
+            <div class="radioOption">
+              <input type="radio" id="outro" name="etnia" value="Outro" onclick="salvaEtnia(this.value)">
+              <label for="outro">Outro</label><br>
+            </div>
+          </div>
+          <div class="firstPart">
+            <label>Digite o <span>número de imagens</span> para serem avaliadas, a partir do vídeo.</label>
+
+            <input type="number" id="quantidadeImagensIniciais" value="1000">
+            <label for="quantidadeImagensIniciais">Recomendado 1000 imagens.</label>
+          </div>
         </form>
+        <div class="divLoader">
+          <div class="loader" id="loaderCreate"></div>
+        </div>
         <div class="divButton">
           <button id="createButton">Criar pasta</button>
         </div>
@@ -53,6 +86,9 @@
             <input type="file" webkitdirectory mozdirectory id="chooseFolderToTrain">
           </div>
         </form>
+        <div class="divLoader">
+          <div class="loader" id="loaderTrain"></div>
+        </div>
         <div class="divButton">
           <button id="trainButton" >Treinar modelo</button>
         </div>
@@ -71,6 +107,9 @@
             <input type="file" webkitdirectory mozdirectory id="chooseFolderToApplyModel">
           </div>
         </form>
+        <div class="divLoader">
+          <div class="loader" id="loaderApply"></div>
+        </div>
         <div class="divButton">
           <button id="applyButton">Aplicar modelo na pasta</button> 
         </div>
@@ -79,83 +118,150 @@
       <div id="Tokyo" class="tabcontent">
         <h3>Análise</h3>
         <p>Visualize os dados gerados.</p>
+
+        <div class="resultPart">
+          <label>Prévias das amostras classificadas:</label>
+          <img id="amostrasResultado" src="" alt="Amostras do resultado">
+        </div>
+        <div class="resultPart">
+          <label>Resultado final:</label>
+          <img id="resultadoFinal" src="" alt="Resultado final">
+        </div>
       </div>
     </div>
   </body>
+
 
   <script>
 
     // ON CHANGE DO CREATEDATABASE - SELECIONANDO ARQUIVO
     document.getElementById('chooseFileToCreate').addEventListener('change', function(e){
-      console.log('ARMAZENOU NO CREATE DATABASE - FOLDER ')
       const [arquivoSelecionado, pastaSelecionada] = selectFile(e)
 
-      console.log(`${pastaSelecionada}`)
-      console.log(`${arquivoSelecionado}`)
+      // console.log(`${pastaSelecionada}`)
+      // console.log(`${arquivoSelecionado}`)
       localStorage.setItem('caminhoCreateDatabase', JSON.stringify(pastaSelecionada))
       localStorage.setItem('arquivoCreateDatabase', JSON.stringify(arquivoSelecionado))
+
     })
     
+    // MANIPULAÇÃO PARA MOSTRAR OU NAO O LOADING - LOADER DO CREATE
+    document.getElementById("loaderCreate").style.visibility="hidden";
     // ON CLICK DO CREATEDATABASE
     document.getElementById('createButton').addEventListener('click', function(){
-      console.log('CLICOU NO CREATE HTML')
+
+      document.getElementById("loaderCreate").style.visibility="visible";
+
+      const quantidadeImagensIniciais = document.getElementById('quantidadeImagensIniciais').value;
+
       const resultadoPasta = localStorage.getItem('caminhoCreateDatabase')
       const resultadoArquivo = localStorage.getItem('arquivoCreateDatabase')
-      createDatabase(JSON.parse(resultadoPasta), JSON.parse(resultadoArquivo))
+      const response = createDatabase(JSON.parse(resultadoPasta), JSON.parse(resultadoArquivo), quantidadeImagensIniciais)
+      // console.log('RETORNO FUNÇÃO')
+      // console.log(response)
+
+      setTimeout(() => {
+        console.log(response.includes('OK'))
+        document.getElementById("loaderCreate").style.visibility="hidden";
+      }
+        , 15000)
     })
-    
+
+    function salvaEtnia(etniaSelecionada) {
+      // console.log(etniaSelecionada);
+      if(localStorage.getItem('rotuloCandidato') !== null){
+        localStorage.removeItem('rotuloCandidato')
+      }
+      localStorage.setItem('rotuloCandidato', JSON.stringify(etniaSelecionada))
+    }
     
 
     // ON CHANGE DO TRAINDATA - SELECIONANDO PASTA
     document.getElementById('chooseFolderToTrain').addEventListener('change', function(e){
-      console.log('ARMAZENOU NO TRAIN DATA - FOLDER ')
       const pastaSelecionada = selectFolder(e)
 
-      console.log(`${pastaSelecionada}`)
+      // console.log(`${pastaSelecionada}`)
       localStorage.setItem('caminhoPastaTreinamento', JSON.stringify(pastaSelecionada))
     })
     document.getElementById('chooseFolderToSaveModelTrained').addEventListener('change', function(e){
-      console.log('SELECIONA PASTA PARA SALVAR O MODELO - FOLDER ')
       const pastaSelecionada = selectFolder(e)
 
-      console.log(`${pastaSelecionada}`)
+      // console.log(`${pastaSelecionada}`)
       localStorage.setItem('caminhoPastaSalvaModeloTreinado', JSON.stringify(pastaSelecionada))
     })
-    // ON CLICK DO TARINDATA
-    document.getElementById('trainButton').addEventListener('click', function(){
-      console.log('CLICOU NO TRAIN HTML')
+
+    // MANIPULAÇÃO PARA MOSTRAR OU NAO O LOADING - LOADER DO TRAIN
+    document.getElementById("loaderTrain").style.visibility="hidden";
+    // ON CLICK DO TRAINDATA
+    document.getElementById('trainButton').addEventListener('click',function(){
+      // console.log('CLICOU NO TRAIN HTML')
+
+      document.getElementById("loaderTrain").style.visibility="visible";
+
       const resultadoPasta = localStorage.getItem('caminhoPastaTreinamento')
       const caminhoPastaSalvaModeloTreinado = localStorage.getItem('caminhoPastaSalvaModeloTreinado')
-      trainData(JSON.parse(resultadoPasta), JSON.parse(caminhoPastaSalvaModeloTreinado))
+      const response = trainData(JSON.parse(resultadoPasta), JSON.parse(caminhoPastaSalvaModeloTreinado))
+
+      setTimeout(() => {
+        console.log(response.includes('OK'))
+        document.getElementById("loaderTrain").style.visibility="hidden";
+      }
+        , 80000)
     })
 
 
 
-    // ON CHANGE DO CREATEDATABASE - SELECIONANDO ARQUIVO
+    // ON CHANGE DO APPLY - SELECIONANDO ARQUIVO
     document.getElementById('chooseFolderFromModelTrained').addEventListener('change', function(e){
-      console.log('ARMAZENOU NO APPLY - FOLDER ')
       const pastaSelecionada = selectFolder(e)
 
-      console.log(`${pastaSelecionada}`)
+      // console.log(`${pastaSelecionada}`)
       localStorage.setItem('caminhoModeloTreinado', JSON.stringify(pastaSelecionada))
     })
     document.getElementById('chooseFolderToApplyModel').addEventListener('change', function(e){
-      console.log('ARMAZENOU NO APPLY - FOLDER ')
       const pastaSelecionada = selectFolder(e)
 
-      console.log(`${pastaSelecionada}`)
+      // console.log(`${pastaSelecionada}`)
       localStorage.setItem('caminhoPastaParaAplicar', JSON.stringify(pastaSelecionada))
     })
 
+    // MANIPULAÇÃO PARA MOSTRAR OU NAO O LOADING - LOADER DO APPLY
+    document.getElementById("loaderApply").style.visibility="hidden";
     // ON CLICK DO APPLY
     document.getElementById('applyButton').addEventListener('click', function(){
-      console.log('CLICOU NO APPLY HTML')
+
+      document.getElementById("loaderApply").style.visibility="visible";
+
       const caminhoModeloTreinado = localStorage.getItem('caminhoModeloTreinado')
       const caminhoPastaParaAplicar = localStorage.getItem('caminhoPastaParaAplicar')
-      applyAlgorithm(JSON.parse(caminhoModeloTreinado),JSON.parse(caminhoPastaParaAplicar))
+
+      // PEGA O RÓTULO DEFINIDO PELO USUÁRIO
+      const rotuloCandidato = localStorage.getItem('rotuloCandidato')
+
+      const response = applyAlgorithm(JSON.parse(caminhoModeloTreinado),JSON.parse(caminhoPastaParaAplicar), JSON.parse(rotuloCandidato))
+
+      setTimeout(() => {
+        console.log(response.includes('OK'))
+        document.getElementById("loaderApply").style.visibility="hidden";
+
+
+        document.getElementById("amostrasResultado").setAttribute("src", `${JSON.parse(caminhoModeloTreinado)}/amostrasResultado.png`);
+        document.getElementById("amostrasResultado").style.visibility="visible";
+      
+        document.getElementById("resultadoFinal").setAttribute("src", `${JSON.parse(caminhoModeloTreinado)}/resultadoFinal.png`);
+        document.getElementById("resultadoFinal").style.visibility="visible";
+      }, 20000)
+      
+
     })
 
+    // PARTE DA ABA RESULTADO DO PROJETO
+    document.getElementById("amostrasResultado").style.visibility="hidden";
+    document.getElementById("resultadoFinal").style.visibility="hidden";
+
     
+
+    // FUNÇÕES AUXILIARES DO PROJETO
     function selectFile(e) {
         var theFolder = e.target.files;
         const pathCatched = theFolder[0].path.split(`${theFolder[0].name}`)[0] 
@@ -165,9 +271,9 @@
 
     function selectFolder(e) {
         var theFolder = e.target.files;
-        console.log(theFolder[0])
+        // console.log(theFolder[0])
         const pathCatched = theFolder[0].path.split(`${theFolder[0].name}`)[0] 
-        console.log(pathCatched)
+        // console.log(pathCatched)
         return pathCatched;
     }
 

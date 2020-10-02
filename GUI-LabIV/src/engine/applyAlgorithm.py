@@ -10,6 +10,7 @@ import keras
 
 caminhoModeloTreinado = sys.argv[1]
 caminhoPastaParaAplicar = sys.argv[2]
+rotuloCandidato = sys.argv[3]
 
 # Use the folder created by createDatbase algorithm
 # testing my own data
@@ -69,7 +70,18 @@ print('\n')
 print('Soma = {}'.format(sum(dados['Percentual']) ))
 
 # What i classify me
-myLabel = 0 # Branco
+if(rotuloCandidato == 'Branco'):
+    myLabel = 0
+elif (rotuloCandidato == 'Negro'):
+    myLabel = 1
+elif (rotuloCandidato == 'Outro'):
+    myLabel = 2
+else:
+    myLabel = 3
+
+# myLabel = 0 # Branco
+
+os.chdir(caminhoModeloTreinado)
 
 # Plot a random sample of 30 test images, their predicted labels and ground truth
 figure = plt.figure(figsize=(12, 7))
@@ -84,10 +96,11 @@ for i, index in enumerate( random_number ):
 
     
     # Set the title for each image
-    ax.set_title("B:{}%  Pt:{}%  A:{}%  Pr:{}%".format( (myFace_hat[index][0] * 100).round(1), (myFace_hat[index][1] * 100).round(1), 
+    ax.set_title("B:{}% N:{}% A:{}% P:{}%".format( (myFace_hat[index][0] * 100).round(1), (myFace_hat[index][1] * 100).round(1), 
                                   (myFace_hat[index][2] * 100).round(1), (myFace_hat[index][3] * 100).round(1)),
                                   color=("green" if predict_index == myLabel else "red"))
-plt.show()
+plt.savefig('amostrasResultado.png', bbox_inches='tight' )
+# plt.show()
 
 
 # Plot percents of means from folder created
@@ -98,4 +111,7 @@ ax2.set_title('Média das tendências étnicas calculadas - {} amostras'.format(
 ax2.set_xlabel('Raças/Etnias', fontsize = 14)
 ax2.set_ylabel('Porcentagem', fontsize = 14)
 plt.legend( bbox_to_anchor = (1.08, 0.8), loc = 'center' )
-plt.show()
+plt.savefig('resultadoFinal.png', bbox_inches='tight' )
+# plt.show()
+
+print('OK')

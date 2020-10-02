@@ -137,9 +137,10 @@ def treinaModelo(caminhoPastaTreinamento, caminhoPastaSalvaModelo):
     score = model.evaluate(x_test, y_test)
 
     # Print test accuracy 
-    print('\n', 'Test accuracy:', score[1])
+    print('\n', 'Acurácia:', score[1])
     
     model.save(caminhoPastaSalvaModelo + "modelo")
+    print('OK')
 
 def main():
     print('TRAIN DATA NO MAIN')

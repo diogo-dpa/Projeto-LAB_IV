@@ -27,21 +27,21 @@ def criaPastaComNomes(listaNomes):
         print("Não foi possível criar o diretório ou o mesmo já existe.")
 
 # Realiza a captura das faces no vídeo
-def salvaFacesDetectadas(caminho, nome):
+def salvaFacesDetectadas(caminho, nome, quantidadeImagensIniciais):
     
     pathFile = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-    print(caminho)
-    print(caminho+nome+'.mp4')
     # pathFile = r"C:\\Users\\diogo\\AppData\\Local\\Programs\\Python\\Python37\\Lib\\site-packages\\cv2\\data\\haarcascade_frontalface_default.xml"
     face_cascade = cv2.CascadeClassifier(pathFile)
     # cap = cv2.VideoCapture(sys.path[0] + "/" + nome + ".mp4") #inicia captura da câmera
     cap = cv2.VideoCapture(caminho + nome + ".mp4") #inicia captura da câmera
     counterFrames = 0
     # Número de amostras
-    limitSamples = 100
+    # limitSamples = 100
+    limitSamples = quantidadeImagensIniciais
 
     while(counterFrames < limitSamples): #quando chegar ao milésimo frame, para
-        print(counterFrames)
+        # printa a quantidade de fotos 
+        # print(counterFrames)
         ret, img = cap.read()
 
         #frame não pode ser obtido? entao sair
@@ -71,23 +71,22 @@ def salvaFacesDetectadas(caminho, nome):
         counterFrames += 1
             
     cap.release()
+    print('OK')
 
 #função principal da aplicação
-def main(caminho, nome):
-    # listaNome = carregaNomesASeremLidos(sys.path[0]+"/nomesDosVideos.txt")
-    # listaNome = carregaNomesASeremLidos(sys.path[0]+"/nomesDosVideos.txt")
+def main(caminho, nome, quantidadeImagensIniciais):
     os.chdir(caminho)
     arquivo = criaPastaComNomes(nome)
-    # sys.stdout.flush()
     
     # for nome in listaNome:
     #     print("Analisando: " + nome)
-    salvaFacesDetectadas(caminho, arquivo)
+    salvaFacesDetectadas(caminho, arquivo, quantidadeImagensIniciais)
 
 
 if __name__ == "__main__":
-    print('Entrou PYTHON')
+    # print('Entrou PYTHON')
     caminhoArquivo = sys.argv[1]
     nomeArquivo = sys.argv[2]
+    quantidadeImagensIniciais = sys.argv[3]
     # print(caminhoArquivo)
-    main(caminhoArquivo, nomeArquivo)
+    main(caminhoArquivo, nomeArquivo, int(quantidadeImagensIniciais))

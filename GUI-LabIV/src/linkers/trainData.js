@@ -20,8 +20,12 @@ function trainData(treinamento, caminhoPastaSalvaModelo){
     // treinamento? variavel = new PythonShell(opcoes.script):
     //     variavel = new PythonShell(opcoes.script);
     
+    let teste = []
 
     variavel.on('message', function(message){
-        console.log(message);
+        // console.log(message);
+        teste.push(message)
     })
+
+    return teste;
 }
