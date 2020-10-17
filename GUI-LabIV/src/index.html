@@ -245,9 +245,11 @@
         document.getElementById("loaderApply").style.visibility="hidden";
 
 
+        // document.getElementById("amostrasResultado").setAttribute("src", '');
         document.getElementById("amostrasResultado").setAttribute("src", `${JSON.parse(caminhoModeloTreinado)}/amostrasResultado.png`);
         document.getElementById("amostrasResultado").style.visibility="visible";
       
+        // document.getElementById("resultadoFinal").setAttribute("src", '');
         document.getElementById("resultadoFinal").setAttribute("src", `${JSON.parse(caminhoModeloTreinado)}/resultadoFinal.png`);
         document.getElementById("resultadoFinal").style.visibility="visible";
       }, 20000)
